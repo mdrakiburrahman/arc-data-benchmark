@@ -12,13 +12,13 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 - [ ] Increase Core limit in a region
 - [ ] Terraform AKS setup with:
-  - [ ] CNI
   - [ ] Container Insights and Log Analytics
-  - [ ] Configurable `NodePools` test
+  - [ ] Plug-and-play new `NodePools`
 - [ ] `az` Data Controller Deploy with Kafka (Indirect mode)
 - [ ] Argo CD hookup with this repo
   - [ ] Weavescope
   - [ ] SQL MI
+  - [ ] Kafdrop
 
 ---
 
@@ -30,6 +30,42 @@ There are a few different **temporary** monitoring tools deployed in this enviro
 | ---- | --------------- | ----------------- | ------- |
 | A    | `0.0.0.0:3000`  | Username:Password | B       |
 
+---
+## Infrastructure Deployment
+
+### Dev Container
+The folder `.devcontainer` has necessary tools (terraform, azure-cli, kubectl etc) to get started on this demo with [Remote Containers](https://code.visualstudio.com/docs/remote/containers).
+
+### Terraform apply
+
+The following script deploys the environment with Terraform:
+```bash
+# ---------------------
+# ENVIRONMENT VARIABLES
+# For Terraform
+# ---------------------
+# Secrets
+export TF_VAR_SPN_CLIENT_ID=$spnClientId
+export TF_VAR_SPN_CLIENT_SECRET=$spnClientSecret
+export TF_VAR_SPN_TENANT_ID=$spnTenantId
+export TF_VAR_SPN_SUBSCRIPTION_ID=$subscriptionId
+
+# Module specific
+export TF_VAR_resource_group_name='raki-jake-arc-benchmark-rg'
+
+# ---------------------
+# DEPLOY TERRAFORM
+# ---------------------
+cd terraform
+terraform init
+terraform plan
+terraform apply -auto-approve
+
+# ---------------------
+# ‼ DESTROY ENVIRONMENT
+# ---------------------
+terraform destory
+```
 ---
 
 # Questions to Answer

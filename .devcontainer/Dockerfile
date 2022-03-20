@@ -35,6 +35,17 @@ RUN apt-get install -y apt-transport-https gnupg2 lsb-release \
 # Add Azure CLI extensions
 RUN az config set extension.use_dynamic_install=yes_without_prompt
 
+# Install Docker CE CLI
+RUN apt-get update \
+    && apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common lsb-release \
+    && curl -fsSL https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | (OUT=$(apt-key add - 2>&1) || echo $OUT) \
+    && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]') $(lsb_release -cs) stable" \
+    && apt-get install -y docker-ce-cli
+
+# Install Docker Compose
+RUN curl -sSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
+
 # Install Kubectl
 RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list \
     && curl -sL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - 2>/dev/null \
@@ -81,8 +92,8 @@ RUN wget --quiet https://releases.hashicorp.com/terraform/${TF_Version}/terrafor
 RUN apt-get update \
     && apt-get install tree -y \
     && apt-get install make -y \
-    && apt-get install -y kafkacat
-
+    && apt-get install kafkacat -y \
+    && apt-get install dos2unix -y
 # Clean up
 RUN apt-get autoremove -y \
     && apt-get clean -y \
@@ -91,3 +102,9 @@ RUN apt-get autoremove -y \
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
+
+# Startup
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD [ "sleep", "infinity" ]

@@ -41,7 +41,7 @@
 		"golang.go",
 		// VSCode stuff
 		"esbenp.prettier-vscode",
-		// "wakatime.vscode-wakatime",
+		"wakatime.vscode-wakatime",
 		"HashiCorp.terraform"
 	],
 	
