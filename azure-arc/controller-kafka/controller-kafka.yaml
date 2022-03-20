@@ -1,0 +1,75 @@
+apiVersion: v1
+data:
+  password: YWNudG9yUFJFU1RPIQ==
+  username: YWRtaW4=
+kind: Secret
+metadata:
+  name: metricsui-admin-secret
+  namespace: arc
+type: Opaque
+---
+apiVersion: v1
+data:
+  password: YWNudG9yUFJFU1RPIQ==
+  username: YWRtaW4=
+kind: Secret
+metadata:
+  name: logsui-admin-secret
+  namespace: arc
+type: Opaque
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-arc-controller
+  namespace: arc
+---
+apiVersion: arcdata.microsoft.com/v3
+kind: DataController
+metadata:
+  generation: 1
+  name: arc-dc
+  namespace: arc
+spec:
+  monitoring:
+    enableKafka: true
+  dev: true
+  credentials:
+    dockerRegistry: arc-private-registry
+    domainServiceAccount: domain-service-account-secret
+    serviceAccount: sa-arc-controller
+  docker:
+    imagePullPolicy: Always
+    imageTag: v1.4.1_2022-03-08
+    registry: mcr.microsoft.com
+    repository: arcdata
+  infrastructure: azure
+  security:
+    allowDumps: true
+    allowNodeMetricsCollection: true
+    allowPodMetricsCollection: true
+  services:
+  - name: controller
+    port: 30080
+    serviceType: LoadBalancer
+  settings:
+    ElasticSearch:
+      vm.max_map_count: "-1"
+    azure:
+      connectionMode: indirect
+      location: eastus
+      resourceGroup: raki-jake-arc-benchmark-rg
+      subscription: 182c901a-129a-4f5d-86e4-cc6b294590a2
+    controller:
+      displayName: arc-dc
+      logs.rotation.days: "7"
+      logs.rotation.size: "5000"
+  storage:
+    data:
+      accessMode: ReadWriteOnce
+      className: default
+      size: 15Gi
+    logs:
+      accessMode: ReadWriteOnce
+      className: default
+      size: 10Gi

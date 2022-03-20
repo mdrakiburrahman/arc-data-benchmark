@@ -91,7 +91,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "aks_nodepool_big" {
   vm_size               = "Standard_DS5_v2"
   node_count            = 1
   enable_auto_scaling   = true
-  min_count             = 1
+  min_count             = 0
   max_count             = 15
 
   tags = var.tags
