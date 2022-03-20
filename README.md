@@ -12,13 +12,13 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 # TO-DO
 
 - [ ] Increase Core limit in a region
-- [X] Terraform AKS setup with:
-  - [X] Container Insights and Log Analytics
-  - [X] Plug-and-play new `NodePools`
-- [X] `az` Data Controller Deploy with Kafka (Indirect mode)
-- [X] Argo CD hookup with this repo
-  - [X] ArgoCD setup
-  - [ ] Weavescope
+- [x] Terraform AKS setup with:
+  - [x] Container Insights and Log Analytics
+  - [x] Plug-and-play new `NodePools`
+- [x] `az` Data Controller Deploy with Kafka (Indirect mode)
+- [x] Argo CD hookup with this repo
+  - [x] ArgoCD setup
+  - [x] Weavescope
   - [ ] SQL MI(s)
   - [ ] Kafdrop
 
@@ -26,13 +26,14 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 # Dashboards/endpoints
 
-There are a few different **temporary** monitoring tools deployed in this environment, below are the endpoints.
+There are a few different monitoring tools deployed in this environment, below are the endpoints:
 
-| Tech    | Expose endpoint                                                        | Endpoint                 | Credentials             | Purpose               |
-| ------- | ---------------------------------------------------------------------- | ------------------------ | ----------------------- | --------------------- |
-| Grafana | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!     | Data Services Metrics |
-| Kibana  | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!     | Data Services Logs    |
-| ArgoCD  | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:bqW0LFPfJiIS5BUD! | CICD interface        |
+| Tech       | Expose endpoint                                                        | Endpoint                 | Credentials             | Purpose                  |
+| ---------- | ---------------------------------------------------------------------- | ------------------------ | ----------------------- | ------------------------ |
+| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!     | Data Services Metrics    |
+| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!     | Data Services Logs       |
+| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:bqW0LFPfJiIS5BUD! | CICD interface           |
+| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                    | K8s monitoring interface |
 
 ---
 
@@ -151,10 +152,22 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 
 # Get secret
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
-
-# Follow the steps here to get Weavescope onboarded: https://www.buchatech.com/2021/12/deploy-app-to-azure-kubernetes-service-via-argo-cd/
-
 ```
+
+---
+
+## Weavescope
+
+Follow the simple steps here to get Weavescope onboarded: https://www.buchatech.com/2021/12/deploy-app-to-azure-kubernetes-service-via-argo-cd/
+![Weavescope deployed](_images/weavescope-argocd.png)
+
+And we see the UI:
+![Weavescope UI](_images/weavescope.png)
+
+---
+
+## SQL MIs
+
 
 ---
 
