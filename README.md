@@ -32,7 +32,7 @@ There are a few different monitoring tools deployed in this environment, below a
 | ---------- | ---------------------------------------------------------------------- | ------------------------ | ----------------------- | ------------------------ |
 | Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!     | Data Services Metrics    |
 | Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!     | Data Services Logs       |
-| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:bqW0LFPfJiIS5BUD! | CICD interface           |
+| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:bqW0LFPfJiIS5BUD | CICD interface           |
 | Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                    | K8s monitoring interface |
 
 ---
