@@ -19,7 +19,7 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 - [x] Argo CD hookup with this repo
   - [x] ArgoCD setup
   - [x] Weavescope
-  - [ ] SQL MI(s)
+  - [x] SQL MI(s)
   - [ ] Kafdrop
 
 ---
@@ -169,6 +169,12 @@ And we see the UI:
 ---
 
 ## SQL MIs
+
+```bash
+kubectl apply -f /workspaces/arc-data-benchmark/kubernetes/argocd-config/sqlmi.yaml -n argocd
+```
+And we see the SQL MI resources in the UI:
+![SQL MI](_images/sqlmi-argocd.png)
 
 ---
 
