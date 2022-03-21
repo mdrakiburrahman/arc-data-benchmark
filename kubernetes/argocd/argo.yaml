@@ -9557,7 +9557,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-cm
 data:
-  application.instanceLabelKey: app.kubernetes.io/instance
+  application.instanceLabelKey: argocd.argoproj.io/instance
 ---
 apiVersion: v1
 kind: ConfigMap
