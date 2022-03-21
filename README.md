@@ -28,12 +28,12 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 There are a few different monitoring tools deployed in this environment, below are the endpoints:
 
-| Tech       | Expose endpoint                                                        | Endpoint                 | Credentials             | Purpose                  |
-| ---------- | ---------------------------------------------------------------------- | ------------------------ | ----------------------- | ------------------------ |
-| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!     | Data Services Metrics    |
-| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!     | Data Services Logs       |
+| Tech       | Expose endpoint                                                        | Endpoint                 | Credentials            | Purpose                  |
+| ---------- | ---------------------------------------------------------------------- | ------------------------ | ---------------------- | ------------------------ |
+| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!    | Data Services Metrics    |
+| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!    | Data Services Logs       |
 | ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:UpyWxSctQLnVmEZJ | CICD interface           |
-| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                    | K8s monitoring interface |
+| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                   | K8s monitoring interface |
 
 ---
 
@@ -159,6 +159,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ## Weavescope
 
 Follow the simple steps here to get Weavescope onboarded: https://www.buchatech.com/2021/12/deploy-app-to-azure-kubernetes-service-via-argo-cd/
+
+**YAML file:** `/workspaces/arc-data-benchmark/kubernetes/argocd-config/weavescope.yaml`
 ![Weavescope deployed](_images/weavescope-argocd.png)
 
 And we see the UI:
@@ -167,7 +169,6 @@ And we see the UI:
 ---
 
 ## SQL MIs
-
 
 ---
 
