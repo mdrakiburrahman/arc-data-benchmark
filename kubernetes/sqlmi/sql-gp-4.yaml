@@ -93,8 +93,6 @@ spec:
 apiVersion: sql.arcdata.microsoft.com/v2
 kind: SqlManagedInstance
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
   name: sql-gp-3
   namespace: arc
 spec:
