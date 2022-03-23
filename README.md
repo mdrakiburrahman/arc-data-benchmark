@@ -280,7 +280,9 @@ let endDateTime = changeTime + 15m;
 let trendBinSize = 1m;
 ```
 
-## Key observations
+---
+
+## Observations and Kusto graphs
 
 ### **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
 
@@ -299,6 +301,10 @@ Scaled up node to 25 - ``:
 
 Start to end view:
 ![5](_images/nodes-end-to-end.png)
+
+---
+
+## Calculations
 
 ---
 
