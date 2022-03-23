@@ -57,9 +57,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
     node_count          = 2
     vm_size             = "Standard_DS3_v2"
     type                = "VirtualMachineScaleSets"
-    enable_auto_scaling = true
-    min_count           = 1
-    max_count           = 50
+    enable_auto_scaling = false
+    min_count           = null
+    max_count           = null
   }
 
   identity {
@@ -68,8 +68,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   lifecycle {
     ignore_changes = [
-      # Ignore changes to nodes because we have autoscale enabled
-      default_node_pool[0].node_count
+      # Commenting out ignores changes to nodes
+      # default_node_pool[0].node_count
     ]
   }
 
@@ -89,10 +89,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "aks_nodepool_big" {
   name                  = "bigpool"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
   vm_size               = "Standard_DS5_v2"
-  node_count            = 1
-  enable_auto_scaling   = true
-  min_count             = 0
-  max_count             = 15
+  node_count            = 0
+  enable_auto_scaling   = false
+  min_count             = null
+  max_count             = null
 
   tags = var.tags
 }

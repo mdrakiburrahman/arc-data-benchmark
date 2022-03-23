@@ -11,7 +11,7 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 # TO-DO
 
-- [ ] Increase Core limit in a region
+- [Xw] Increase Core limit in a region
 - [x] Terraform AKS setup with:
   - [x] Container Insights and Log Analytics
   - [x] Plug-and-play new `NodePools`
@@ -173,8 +173,132 @@ And we see the UI:
 ```bash
 kubectl apply -f /workspaces/arc-data-benchmark/kubernetes/argocd-config/sqlmi.yaml -n argocd
 ```
+
 And we see the SQL MI resources in the UI:
 ![SQL MI](_images/sqlmi-argocd.png)
+
+---
+
+# Experiment setup
+
+### Effect of logs
+
+- **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
+- **Experiment 2**: Effect of instances on Log Volumes
+- **Experiment 3**: Effect of replicas (2, 3) on Log Volumes
+
+### Max limits
+
+- **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+- **Experiment 5**: Max # of MIs a Controller can ramp up to (assume infra is there)
+- **Experiment 6**: Max # of MIs you can upgrade at once
+
+### Things we want to track
+
+- Nodes - number, sizes
+- MIs - number, replicas, size
+- Deployment timestamp start, end
+
+### The equation
+
+We want to model this for all of our PVCs
+
+```text
+data-control
+data-controldb
+data-kafka-broker-0
+data-kafka-zookeeper-0
+data-logsdb-0
+data-metricsdb-0
+logs-control
+logs-controldb
+logs-kafka-broker-0
+logs-kafka-zookeeper-0
+logs-logsdb-0
+logs-metricsdb-0
+```
+
+![Equation](_images/equation.png)
+
+---
+
+### Experiment steps
+
+> Script to generate query result timestamp: `$Date = Get-Date; $Date.ToString() -replace(":", "-") -replace("/", "-")`
+
+#### **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
+
+| #   | Timestamp (UTC)      | Step performed                              | Clusters | Nodes (no Autoscale) | MIs | Query results                        | Comments                                          |
+| --- | -------------------- | ------------------------------------------- | -------- | -------------------- | --- | ------------------------------------ | ------------------------------------------------- |
+| 1   | 2022-03-23T00:00:00Z | Deployed base Terraform module + Controller | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-22 9-10-22 PM.csv            | Baseline setup for Arc Indirect                   |
+| 2   | 2022-03-23T01:26:00Z | Scaled up node to 3                         | 1        | 3*DS3_V2, 0*DS5_v2   | 0   | 2022-03-22 9-40-16 PM.csv            | Looking at impact of nodes increase on log volume |
+| 3   | 2022-03-23T01:47:00Z | Scaled up node to 10                        | 1        | 10*DS3_V2, 0*DS5_v2  | 0   | 2022-03-22 9-56-14 PM.csv            | Looking at impact of nodes increase on log volume |
+| 4   | 2022-03-23T02:05:00Z | Scaled up node to 25 (max)                  | 1        | 25*DS3_V2, 0*DS5_v2  | 0   | 2022-03-22 10-34-02 PM.csv           | Looking at impact of nodes increase on log volume |
+| 5   | 2022-03-23T02:34:00Z | None                                        | 1        | 25*DS3_V2, 0*DS5_v2  | 0   | 2022-03-22 10-42-30 PM_nodes_e2e.csv | Final snapshot of nodes                           |
+| 6   | 2022-03-23T02:34:00Z | Scaled down node to 2                       | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                                 | Back down to normal                               |
+
+---
+
+# Useful Kusto queries
+
+## Query 1: Grab usage metrics for all PVCs
+
+The following query returns all
+
+```sql
+let startDateTime = todatetime('2022-03-23T00:00:00Z');
+let endDateTime = startDateTime + 30m;
+let trendBinSize = 1m;
+
+KubePodInventory
+| where TimeGenerated < endDateTime
+| where TimeGenerated >= startDateTime
+| where Namespace in ('arc' )
+| distinct PodUid
+| join hint.strategy=shuffle (
+    InsightsMetrics
+    | where TimeGenerated < endDateTime + trendBinSize
+    | where TimeGenerated >= startDateTime - trendBinSize
+    | where Namespace == 'container.azm.ms/pv'
+    | where Name == 'pvUsedBytes'
+    | extend Tags = todynamic(Tags)
+    | extend CapacityMB = Tags.pvCapacityBytes/1048576, PodUid = tostring(Tags.podUid), PodName = Tags.podName, VolumeMB = Tags.volume/1048576, PvUsedMB = Val/1048576
+    | extend UsagePercent = round((PvUsedMB / CapacityMB) * 100, 2)
+    | extend PvcName = tostring(Tags.pvcName), VolumeName = Tags.volumeName
+    | project TimeGenerated, Computer, PodName, PvcName, VolumeName, VolumeMB, PvUsedMB, CapacityMB, UsagePercent, PodUid
+    )
+    on PodUid
+| project TimeGenerated, Computer, PodName, PvcName, VolumeName, VolumeMB, PvUsedMB, CapacityMB, UsagePercent
+```
+
+## Query 2: Center around the time when a change was executed (e.g. node spinup)
+
+```sql
+let changeTime = todatetime('2022-03-23T01:26:00Z');
+let startDateTime = changeTime - 5m;
+let endDateTime = changeTime + 15m;
+let trendBinSize = 1m;
+```
+
+## Key observations
+
+### **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
+
+Baseline - `2022-03-22 9-10-22 PM.csv`:
+![1](_images/2022-03-22%209-10-22%20PM.png)
+
+Scaled up node to 3 - `2022-03-22 9-40-16 PM.csv`:
+![2](_images/2022-03-22%209-40-16%20PM.png)
+
+Scaled up node to 10 - `2022-03-22 9-56-14 PM.csv`:
+![3](_images/2022-03-22%209-56-14%20PM.png)
+
+Scaled up node to 25 - ``:
+![3.5](_images/nodepool-max.png)
+![4](_images/2022-03-22%2010-34-02%20PM.png)
+
+Start to end view:
+![5](_images/nodes-end-to-end.png)
 
 ---
 
@@ -279,18 +403,6 @@ A: TBD
 #### Q: Does Transactions happening on an MI (e.g. HammerDB) increase the amount of logs/metrics generated?
 
 A: TBD
-
----
-
-# Useful Kusto queries
-
-## Query 1: TBD
-
-```sql
-SELECT * FROM FOO
-```
-
-Diagram: TBD
 
 ---
 
