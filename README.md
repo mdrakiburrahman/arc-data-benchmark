@@ -242,7 +242,7 @@ logs-metricsdb-0
 | #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                        |
 | --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | ------------------------------- |
 | 1   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv | Baseline setup before MI deploy |
-| 2   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | TBD | Deployed 1 MI |
+| 2   | 2022-03-23T12:59:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | TBD                       | Deployed 1 MI                   |
 
 ---
 
