@@ -237,6 +237,13 @@ logs-metricsdb-0
 | 5   | 2022-03-23T02:34:00Z | None                                        | 1        | 25*DS3_V2, 0*DS5_v2  | 0   | 2022-03-22 10-42-30 PM_nodes_e2e.csv | Final snapshot of nodes                           |
 | 6   | 2022-03-23T02:34:00Z | Scaled down node to 2                       | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                                 | Back down to normal                               |
 
+#### **Experiment 2**: Effect of SQL MIs on Log Volumes
+
+| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                        |
+| --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | ------------------------------- |
+| 1   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv | Baseline setup before MI deploy |
+| 2   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | TBD | Deployed 1 MI |
+
 ---
 
 # Useful Kusto queries
@@ -301,6 +308,11 @@ Scaled up node to 25 - ``:
 
 Start to end view:
 ![5](_images/nodes-end-to-end.png)
+
+### **Experiment 2**: Effect of SQL MIs on Log Volumes
+
+Baseline - `2022-03-23 8-48-54 AM.csv`:
+![1](_images/sqlmi-baseline.png)
 
 ---
 
