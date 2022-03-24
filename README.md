@@ -15,7 +15,7 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 - [x] Terraform AKS setup with:
   - [x] Container Insights and Log Analytics
   - [x] Plug-and-play new `NodePools`
-- [x] `az` Data Controller Deploy with Kafka (Indirect mode)
+- [x] **`az`** Data Controller Deploy with Kafka (Indirect mode)
 - [x] Argo CD hookup with this repo
   - [x] ArgoCD setup
   - [x] Weavescope
@@ -242,7 +242,7 @@ logs-metricsdb-0
 | #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                        |
 | --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | ------------------------------- |
 | 1   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv | Baseline setup before MI deploy |
-| 2   | 2022-03-23T12:59:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | TBD                       | Deployed 1 MI                   |
+| 2   | 2022-03-23T12:59:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | 2022-03-24 8-30-00 AM.csv | Deployed 1 MI                   |
 
 ---
 
@@ -313,6 +313,9 @@ Start to end view:
 
 Baseline - `2022-03-23 8-48-54 AM.csv`:
 ![1](_images/sqlmi-baseline.png)
+
+Scaled up MI to 1, running for ~24 hours - `2022-03-22 9-40-16 PM.csv`:
+![2](_images/2022-03-22%209-40-16%20PM.png)
 
 ---
 
