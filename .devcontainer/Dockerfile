@@ -94,6 +94,7 @@ RUN apt-get update \
     && apt-get install make -y \
     && apt-get install kafkacat -y \
     && apt-get install dos2unix -y
+    
 # Clean up
 RUN apt-get autoremove -y \
     && apt-get clean -y \
