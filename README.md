@@ -246,7 +246,7 @@ logs-metricsdb-0
 | 3   | 2022-03-24T12:46:00Z | +1 GP MI            | 1        | 2*DS3_V2, 0*DS5_v2   | 2   | 2022-03-24 9-09-55 PM.csv  | Deployed +1 MI                          |
 | 4   | 2022-03-25T01:24:00Z | +1 DS5_v2 node      | 1        | 2*DS3_V2, 1*DS5_v2   | 2   | 2022-03-24 9-47-03 PM.csv  | Deployed +1 Node since out of memory    |
 | 5   | 2022-03-25T01:58:00Z | +5 GP MI            | 1        | 2*DS3_V2, 1*DS5_v2   | 7   | 2022-03-24 10-31-04 PM.csv | Deployed +5 MIs to see if 5x logs slope |
-| 6   | 2022-03-25T01::00Z   | -7 GP MIs - 2 nodes | 1        | 1*DS3_V2, 0*DS5_v2   | 0   | TBD                        | Removed MIs and nodes as test is over   |
+| 6   | 2022-03-25T02:47:00Z | -7 GP MIs - 2 nodes | 1        | 1*DS3_V2, 0*DS5_v2   | 0   | None                       | Removed MIs and nodes as test is over   |
 
 ---
 
