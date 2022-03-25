@@ -239,11 +239,13 @@ logs-metricsdb-0
 
 #### **Experiment 2**: Effect of SQL MIs on Log Volumes
 
-| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                        |
-| --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | ------------------------------- |
-| 1   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv | Baseline setup before MI deploy |
-| 2   | 2022-03-23T12:59:00Z | +1 GP MI       | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | 2022-03-24 8-30-00 AM.csv | Deployed +1 MI                  |
-| 3   | 2022-03-24T12:46:00Z | +1 GP MI       | 1        | 2*DS3_V2, 0*DS5_v2   | 2   | TBD                       | Deployed +1 MI                  |
+| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                                |
+| --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | --------------------------------------- |
+| 1   | 2022-03-23T12:00:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv | Baseline setup before MI deploy         |
+| 2   | 2022-03-23T12:59:00Z | +1 GP MI       | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | 2022-03-24 8-30-00 AM.csv | Deployed +1 MI                          |
+| 3   | 2022-03-24T12:46:00Z | +1 GP MI       | 1        | 2*DS3_V2, 0*DS5_v2   | 2   | 2022-03-24 9-09-55 PM.csv | Deployed +1 MI                          |
+| 4   | 2022-03-25T01:24:00Z | +1 DS5_v2 node | 1        | 2*DS3_V2, 1*DS5_v2   | 2   | 2022-03-24 9-47-03 PM.csv | Deployed +1 Node since out of memory    |
+| 5   | 2022-03-25T01::00Z   | +5 GP MI       | 1        | 2*DS3_V2, 1*DS5_v2   | 7   | TBD                       | Deployed +5 MIs to see if 5x logs slope |
 
 ---
 
@@ -254,8 +256,8 @@ logs-metricsdb-0
 The following query returns all
 
 ```sql
-let startDateTime = todatetime('2022-03-23T00:00:00Z');
-let endDateTime = startDateTime + 30m;
+let startDateTime = todatetime('2022-03-24T12:46:00Z');
+let endDateTime = startDateTime + 12h;
 let trendBinSize = 1m;
 
 KubePodInventory
@@ -318,7 +320,13 @@ Baseline - `2022-03-23 8-48-54 AM.csv`:
 Scaled up MI to 1, running for ~24 hours - `2022-03-22 9-40-16 PM.csv`:
 ![2](_images/2node-1mi.png)
 
-Scaled up MI to 2, running for ~TBD hours - `TBD`:
+Scaled up MI to 2, running for ~12 hours - `2022-03-24 9-09-55 PM.csv`:
+![2](_images/2node-2mi.png)
+
+Zooming in on the spike:
+![3](_images/2node-2mi-spike.png)
+
+Scaled up MI to 3, running for TBD hours - `TBD`:
 
 ---
 
