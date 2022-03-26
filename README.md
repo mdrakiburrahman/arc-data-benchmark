@@ -11,7 +11,7 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 # TO-DO
 
-- [Xw] Increase Core limit in a region
+- [x] Increase Core limit in a region
 - [x] Terraform AKS setup with:
   - [x] Container Insights and Log Analytics
   - [x] Plug-and-play new `NodePools`
@@ -21,6 +21,10 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
   - [x] Weavescope
   - [x] SQL MI(s)
   - [ ] Kafdrop
+- [ ] Experiments
+  - [x] **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
+  - [x] **Experiment 2**: Effect of instances on Log Volumes
+  - [ ] **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
 
 ---
 
@@ -185,12 +189,12 @@ And we see the SQL MI resources in the UI:
 
 - **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
 - **Experiment 2**: Effect of instances on Log Volumes
-- **Experiment 3**: Effect of replicas (2, 3) on Log Volumes
+- **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
 
-### Max limits
+### Max limits per controller
 
 - **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
-- **Experiment 5**: Max # of MIs a Controller can ramp up to (assume infra is there)
+- **Experiment 5**: Max # of MIs a Controller can ramp up to at most (assume infra is there)
 - **Experiment 6**: Max # of MIs you can upgrade at once
 
 ### Things we want to track
@@ -250,11 +254,13 @@ logs-metricsdb-0
 
 #### **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
 
-| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs         | Query results              | Comments                         |
-| --- | -------------------- | -------------- | -------- | -------------------- | ----------- | -------------------------- | -------------------------------- |
-| 0   | 2022-03-26T13:30:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0           | 2022-03-26 10-04-40 AM.csv | Baseline setup before node scale |
-| 1   | 2022-03-26T13:55:00Z | +1 DS3_v2 node | 1        | 3*DS3_V2, 0*DS5_v2   | 0           | 2022-03-26 10-12-30 AM.csv | Spin up node for replica test    |
-| 2   | 2022-03-26T00:00:00Z | +1 GP MI       | 1        | 3*DS3_V2, 0*DS5_v2   | 1x1 replica | TBD                        | Deployed +1 MI, 1 Replica        |
+| #   | Timestamp (UTC)      | Step performed         | Clusters | Nodes (no Autoscale) | MIs         | Query results              | Comments                                     |
+| --- | -------------------- | ---------------------- | -------- | -------------------- | ----------- | -------------------------- | -------------------------------------------- |
+| 0   | 2022-03-26T13:30:00Z | None                   | 1        | 2*DS3_V2, 0*DS5_v2   | 0           | 2022-03-26 10-04-40 AM.csv | Baseline setup before node scale             |
+| 1   | 2022-03-26T13:55:00Z | +1 DS3_v2 node         | 1        | 3*DS3_V2, 0*DS5_v2   | 0           | 2022-03-26 10-12-30 AM.csv | Spin up node for replica test                |
+| 2   | 2022-03-26T14:21:00Z | +1 GP MI               | 1        | 3*DS3_V2, 0*DS5_v2   | 1x1 replica | 2022-03-26 1-13-44 PM.csv  | Deployed +1 MI, 1 Replica                    |
+| 3   | 2022-03-26T00:00:00Z | -1 GP MI, +1 BC MI x 2 | 1        | 3*DS3_V2, 0*DS5_v2   | 1x2 replica | TBD                        | Deleted previous, Deployed +1 BC, 2 Replicas |
+| 4   | 2022-03-26T00:00:00Z | -1 BC MI, +1 BC MI x 3 | 1        | 3*DS3_V2, 0*DS5_v2   | 1x3 replica | TBD                        | Deleted previous, Deployed +1 BC, 3 Replicas |
 
 ---
 
@@ -350,6 +356,13 @@ Baseline - `2022-03-26 10-04-40 AM.csv`:
 
 Baseline with 3 Nodes, 0 MIs - `2022-03-26 10-12-30 AM.csv`:
 ![1](_images/3node-0mis.png)
+
+1x1 Replica (GP) - `2022-03-26 1-13-44 PM.csv`:
+![2](_images/3node-1mi1repl.png)
+
+1x2 Replica (BC) - `TBD`:
+
+1x3 Replica (BC) - `TBD`:
 
 ---
 
