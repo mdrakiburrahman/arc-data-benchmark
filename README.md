@@ -270,7 +270,8 @@ logs-metricsdb-0
 ## Delete stale PVCs
 
 ```bash
-kubectl delete pvc -l=controller=sql-gp-1 -n arc
+mi='sql-gp-1'
+kubectl delete pvc -l=controller=$mi -n arc
 ```
 
 ## Query 1: Grab usage metrics for all PVCs
