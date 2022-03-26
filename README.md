@@ -239,14 +239,22 @@ logs-metricsdb-0
 
 #### **Experiment 2**: Effect of SQL MIs on Log Volumes
 
-| #   | Timestamp (UTC)      | Step performed      | Clusters | Nodes (no Autoscale) | MIs | Query results              | Comments                                |
-| --- | -------------------- | ------------------- | -------- | -------------------- | --- | -------------------------- | --------------------------------------- |
-| 1   | 2022-03-23T12:00:00Z | None                | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv  | Baseline setup before MI deploy         |
-| 2   | 2022-03-23T12:59:00Z | +1 GP MI            | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | 2022-03-24 8-30-00 AM.csv  | Deployed +1 MI                          |
-| 3   | 2022-03-24T12:46:00Z | +1 GP MI            | 1        | 2*DS3_V2, 0*DS5_v2   | 2   | 2022-03-24 9-09-55 PM.csv  | Deployed +1 MI                          |
-| 4   | 2022-03-25T01:24:00Z | +1 DS5_v2 node      | 1        | 2*DS3_V2, 1*DS5_v2   | 2   | 2022-03-24 9-47-03 PM.csv  | Deployed +1 Node since out of memory    |
-| 5   | 2022-03-25T01:58:00Z | +5 GP MI            | 1        | 2*DS3_V2, 1*DS5_v2   | 7   | 2022-03-24 10-31-04 PM.csv | Deployed +5 MIs to see if 5x logs slope |
-| 6   | 2022-03-25T02:47:00Z | -7 GP MIs - 2 nodes | 1        | 1*DS3_V2, 0*DS5_v2   | 0   | None                       | Removed MIs and nodes as test is over   |
+| #   | Timestamp (UTC)      | Step performed      | Clusters | Nodes (no Autoscale) | MIs | Query results              | Comments                                 |
+| --- | -------------------- | ------------------- | -------- | -------------------- | --- | -------------------------- | ---------------------------------------- |
+| 1   | 2022-03-23T12:00:00Z | None                | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | 2022-03-23 8-48-54 AM.csv  | Baseline setup before MI deploy          |
+| 2   | 2022-03-23T12:59:00Z | +1 GP MI            | 1        | 2*DS3_V2, 0*DS5_v2   | 1   | 2022-03-24 8-30-00 AM.csv  | Deployed +1 MI                           |
+| 3   | 2022-03-24T12:46:00Z | +1 GP MI            | 1        | 2*DS3_V2, 0*DS5_v2   | 2   | 2022-03-24 9-09-55 PM.csv  | Deployed +1 MI                           |
+| 4   | 2022-03-25T01:24:00Z | +1 DS5_v2 node      | 1        | 2*DS3_V2, 1*DS5_v2   | 2   | 2022-03-24 9-47-03 PM.csv  | Deployed +1 Node since out of memory     |
+| 5   | 2022-03-25T01:58:00Z | +5 GP MI            | 1        | 2*DS3_V2, 1*DS5_v2   | 7   | 2022-03-24 10-31-04 PM.csv | Deployed +5 MIs to see if 5x logs slope  |
+| 6   | 2022-03-25T02:47:00Z | -7 GP MIs - 1 nodes | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                       | Removed MIs and big node as test is over |
+
+#### **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
+
+| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs         | Query results              | Comments                         |
+| --- | -------------------- | -------------- | -------- | -------------------- | ----------- | -------------------------- | -------------------------------- |
+| 0   | 2022-03-26T13:30:00Z | None           | 1        | 2*DS3_V2, 0*DS5_v2   | 0           | 2022-03-26 10-04-40 AM.csv | Baseline setup before node scale |
+| 1   | 2022-03-26T13:55:00Z | +1 DS3_v2 node | 1        | 3*DS3_V2, 0*DS5_v2   | 0           | 2022-03-26 10-12-30 AM.csv | Spin up node for replica test    |
+| 2   | 2022-03-26T00:00:00Z | +1 GP MI       | 1        | 3*DS3_V2, 0*DS5_v2   | 1x1 replica | TBD                        | Deployed +1 MI, 1 Replica        |
 
 ---
 
@@ -254,7 +262,7 @@ logs-metricsdb-0
 
 ## Query 1: Grab usage metrics for all PVCs
 
-The following query returns all
+The following query returns all PVCs:
 
 ```sql
 let startDateTime = todatetime('2022-03-24T12:46:00Z');
@@ -313,7 +321,7 @@ Scaled up node to 25 - ``:
 Start to end view:
 ![5](_images/nodes-end-to-end.png)
 
-### **Experiment 2**: Effect of SQL MIs on Log Volumes
+### **Experiment 2**: Effect of SQL MIs on Log Volumes - ✔
 
 Baseline - `2022-03-23 8-48-54 AM.csv`:
 ![1](_images/sqlmi-baseline.png)
@@ -332,6 +340,16 @@ Scaled up MI to 7 and nodes to 3, running for ~15 mins - `2022-03-24 10-31-04 PM
 
 Start to end view:
 ![5](_images/node-e2e-view.png)
+
+### **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
+
+Baseline - `2022-03-26 10-04-40 AM.csv`:
+
+> Note that even though we haven't had any SQL MIs running past few days `Nodes: 2*DS3_V2, 0*DS5_v2 | MI: 0`, baseline PVC usage has been going up
+> ![0](_images/baseline-creep.png)
+
+Baseline with 3 Nodes, 0 MIs - `2022-03-26 10-12-30 AM.csv`:
+![1](_images/3node-0mis.png)
 
 ---
 
