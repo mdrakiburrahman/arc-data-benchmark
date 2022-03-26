@@ -264,7 +264,12 @@ logs-metricsdb-0
 
 ---
 
-# Useful Kusto queries
+# Useful snippets
+
+## Delete stale PVCs
+```bash
+kubectl delete pvc -l=controller=sql-gp-1 -n arc
+```
 
 ## Query 1: Grab usage metrics for all PVCs
 
