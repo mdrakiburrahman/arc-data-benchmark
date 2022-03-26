@@ -4,8 +4,22 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 ## Table of Contents <!-- omit in toc -->
 
-- [A](#A)
-  - [B](#B)
+- [Dashboards and endpoints](#dashboards)
+- [Environment Deployment](#deployment)
+  - [Development Container](##dev-container)
+  - [AKS via Terraform](##terraform)
+  - [Arc Data deployment](##arc-data-deployment)
+    - [No Kafka](###no-kafka)
+    - [With Kafka](###with-kafka)
+  - [ArgoCD](##argocd)
+  - [Weavescope](##weavescope)
+- [Experiment setup](#experiment-setup)
+- [Experiment execution](#experiment-execution)
+- [Useful snippets](#useful-snippets)
+- [Experiment observations](#observations)
+- [Calculations](#calculations)
+- [Questions to Answer](#questions-to-answer)
+- [Lessons Learned](#lessons-learned)
 
 ---
 
@@ -16,38 +30,42 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
   - [x] Container Insights and Log Analytics
   - [x] Plug-and-play new `NodePools`
 - [x] **`az`** Data Controller Deploy with Kafka (Indirect mode)
-- [x] Argo CD hookup with this repo
+- [x] Monitoring and Gitops hookup with this repo
   - [x] ArgoCD setup
   - [x] Weavescope
   - [x] SQL MI(s)
-  - [ ] Kafdrop
 - [ ] Experiments
   - [x] **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
   - [x] **Experiment 2**: Effect of instances on Log Volumes
-  - [ ] **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
+  - [x] **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
+  - [ ] **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+  - [ ] **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
+- [] Calculations
+- [] Answer questions
 
 ---
 
-# Dashboards/endpoints
+# Dashboards
 
 There are a few different monitoring tools deployed in this environment, below are the endpoints:
 
-| Tech       | Expose endpoint                                                        | Endpoint                 | Credentials            | Purpose                  |
-| ---------- | ---------------------------------------------------------------------- | ------------------------ | ---------------------- | ------------------------ |
-| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!    | Data Services Metrics    |
-| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!    | Data Services Logs       |
-| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:rnHFlEtXSwf5aDMx | CICD interface           |
-| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                   | K8s monitoring interface |
+| Tech       | Expose endpoint                                                        | Endpoint                 | Credentials                                        | Purpose                  |
+| ---------- | ---------------------------------------------------------------------- | ------------------------ | -------------------------------------------------- | ------------------------ |
+| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!                                | Data Services Metrics    |
+| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!                                | Data Services Logs       |
+| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:rnHFlEtXSwf5aDMx                             | CICD interface           |
+| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                                               | K8s monitoring interface |
+| FSM        | `kubectl port-forward service/controldb-svc -n arc 1433:1433`          | `127.0.0.1,1433`         | controldb-rw-user:Xk3Ie43zXHA-QtvDsZGpsiOZcYXyNchz | ControllerDB             |
 
 ---
 
-## Infrastructure Deployment
+# Deployment
 
-### Dev Container
+## Dev Container
 
 The folder `.devcontainer` has necessary tools (terraform, azure-cli, kubectl etc) to get started on this demo with [Remote Containers](https://code.visualstudio.com/docs/remote/containers).
 
-### Terraform apply
+## Terraform
 
 The following script deploys the environment with Terraform:
 
@@ -81,11 +99,11 @@ terraform destory
 
 ---
 
-## Arc deployment
+## Arc Data deployment
 
 Before onboarding Argo, we onboard the Data Controller and get Kafka up with a manual workaround.
 
-### Arc Data Services (without Kafka)
+### No Kafka
 
 ```bash
 cd azure-arc
@@ -127,7 +145,7 @@ az arcdata dc create --path './custom' \
 
 ```
 
-### Arc Data Services (_with_ Kafka)
+### With Kafka
 
 We first have to delete the Data controller because `spec.monitoring.enablekafka=true` is immutable as of March 2022, then onboard it with Kafka from YAML definitions:
 
@@ -142,7 +160,7 @@ kubectl apply -f /workspaces/arc-data-benchmark/azure-arc/controller-kafka/contr
 
 ---
 
-## ArgoCD deployment
+## ArgoCD
 
 ```bash
 # Argo namespace
@@ -158,6 +176,15 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
 ```
 
+And we deploy SQL MIs via Argo:
+
+```bash
+kubectl apply -f /workspaces/arc-data-benchmark/kubernetes/argocd-config/sqlmi.yaml -n argocd
+```
+
+And we see the SQL MI resources in the UI:
+![SQL MI](_images/sqlmi-argocd.png)
+
 ---
 
 ## Weavescope
@@ -172,17 +199,6 @@ And we see the UI:
 
 ---
 
-## SQL MIs
-
-```bash
-kubectl apply -f /workspaces/arc-data-benchmark/kubernetes/argocd-config/sqlmi.yaml -n argocd
-```
-
-And we see the SQL MI resources in the UI:
-![SQL MI](_images/sqlmi-argocd.png)
-
----
-
 # Experiment setup
 
 ### Effect of logs
@@ -194,8 +210,7 @@ And we see the SQL MI resources in the UI:
 ### Max limits per controller
 
 - **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
-- **Experiment 5**: Max # of MIs a Controller can ramp up to at most (assume infra is there)
-- **Experiment 6**: Max # of MIs you can upgrade at once
+- **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
 
 ### Things we want to track
 
@@ -226,7 +241,7 @@ logs-metricsdb-0
 
 ---
 
-### Experiment steps
+# Experiment execution
 
 > Script to generate query result timestamp: `$Date = Get-Date; $Date.ToString() -replace(":", "-") -replace("/", "-")`
 
@@ -263,6 +278,12 @@ logs-metricsdb-0
 | 4   | 2022-03-26T18:45:00Z | -1 BC MI, +1 BC MI x 3 | 1        | 3*DS3_V2, 0*DS5_v2   | 1x3 replica | 2022-03-26 4-48-52 PM.csv  | Deleted previous, Deployed +1 BC, 3 Replicas |
 | 5   | 2022-03-26T21:00:00Z | -1 BC MIs - 1 nodes    | 1        | 2*DS3_V2, 0*DS5_v2   | 0           | None                       | Removed MIs and node as test is over         |
 
+#### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+
+| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results              | Comments                          |
+| --- | -------------------- | -------------- | -------- | -------------------- | --- | -------------------------- | --------------------------------- |
+| 1   | 2022-03-26T21:21:00Z | +2 DS5_v2      | 1        | 3*DS3_V2, 0*DS5_v2   | 0   | 2022-03-26 10-12-30 AM.csv | Spin up big nodes for stress test |
+
 ---
 
 # Useful snippets
@@ -272,6 +293,18 @@ logs-metricsdb-0
 ```bash
 mi='sql-gp-1'
 kubectl delete pvc -l=controller=$mi -n arc
+```
+
+## FSM login
+
+```bash
+# Get creds
+kubectl get secret controller-db-rw-secret -n arc -o go-template='{{.data.username}}' | base64 -d
+kubectl get secret controller-db-rw-secret -n arc -o go-template='{{.data.password}}' | base64 -d
+
+# Port forward FSM SQL Server
+kubectl port-forward service/controldb-svc -n arc 1433:1433
+# Instance: 127.0.0.1
 ```
 
 ## Query 1: Grab usage metrics for all PVCs
@@ -315,7 +348,7 @@ let trendBinSize = 1m;
 
 ---
 
-## Observations and Kusto graphs
+# Observations
 
 ### **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
 
@@ -376,9 +409,12 @@ Baseline with 3 Nodes, 0 MIs - `2022-03-26 10-12-30 AM.csv`:
 
 Start to end view:
 ![5](_images/mirepl-e2e-view.png)
+
 ---
 
-## Calculations
+# Calculations
+
+TBD
 
 ---
 
@@ -486,10 +522,6 @@ A: TBD
 
 ---
 
-# Misc notes
-
----
-
-# Gotchas/lessons-learned
+# Lessons Learned
 
 TBD

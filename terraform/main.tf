@@ -89,7 +89,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "aks_nodepool_big" {
   name                  = "bigpool"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
   vm_size               = "Standard_DS5_v2"
-  node_count            = 0
+  node_count            = 2
   enable_auto_scaling   = false
   min_count             = null
   max_count             = null
