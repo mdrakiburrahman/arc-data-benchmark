@@ -283,7 +283,7 @@ logs-metricsdb-0
 | #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                                     |
 | --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | -------------------------------------------- |
 | 1   | 2022-03-26T21:25:00Z | +2 DS5_v2      | 1        | 2*DS3_V2, 2*DS5_v2   | 0   | 2022-03-26 5-32-01 PM.csv | Spin up big nodes for stress test            |
-| 2   | 2022-03-26T21:55:00Z | +55 GP MIs     | 1        | 2*DS3_V2, 2*DS5_v2   | 55  | TBD                       | (110 GB - 2 GB (used))/ 2 GB Per MI = 55 MIs |
+| 2   | 2022-03-26T23:23:00Z | +55 GP MIs     | 1        | 2*DS3_V2, 2*DS5_v2   | 55  | TBD                       | (110 GB - 2 GB (used))/ 2 GB Per MI = 55 MIs |
 
 ---
 
