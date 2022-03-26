@@ -280,9 +280,10 @@ logs-metricsdb-0
 
 #### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
 
-| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results              | Comments                          |
-| --- | -------------------- | -------------- | -------- | -------------------- | --- | -------------------------- | --------------------------------- |
-| 1   | 2022-03-26T21:21:00Z | +2 DS5_v2      | 1        | 3*DS3_V2, 0*DS5_v2   | 0   | 2022-03-26 10-12-30 AM.csv | Spin up big nodes for stress test |
+| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                                     |
+| --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | -------------------------------------------- |
+| 1   | 2022-03-26T21:25:00Z | +2 DS5_v2      | 1        | 2*DS3_V2, 2*DS5_v2   | 0   | 2022-03-26 5-32-01 PM.csv | Spin up big nodes for stress test            |
+| 2   | 2022-03-26T21:55:00Z | +55 GP MIs     | 1        | 2*DS3_V2, 2*DS5_v2   | 55  | TBD                       | (110 GB - 2 GB (used))/ 2 GB Per MI = 55 MIs |
 
 ---
 
@@ -305,6 +306,20 @@ kubectl get secret controller-db-rw-secret -n arc -o go-template='{{.data.passwo
 # Port forward FSM SQL Server
 kubectl port-forward service/controldb-svc -n arc 1433:1433
 # Instance: 127.0.0.1
+```
+
+## `n` number of MIs appended
+
+```bash
+cd /workspaces/arc-data-benchmark/scripts
+chmod u+x append_mis.sh
+./append_mis.sh
+
+# Check dry run
+kubectl apply --dry-run=client -f /workspaces/arc-data-benchmark/kubernetes/sqlmi/sql-gp.yaml
+# sqlmanagedinstance.sql.arcdata.microsoft.com/sql-gp-1 created (dry run)
+# ..
+# sqlmanagedinstance.sql.arcdata.microsoft.com/sql-gp-55 created (dry run)
 ```
 
 ## Query 1: Grab usage metrics for all PVCs
@@ -409,6 +424,10 @@ Baseline with 3 Nodes, 0 MIs - `2022-03-26 10-12-30 AM.csv`:
 
 Start to end view:
 ![5](_images/mirepl-e2e-view.png)
+
+### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+
+55 MIs:
 
 ---
 
