@@ -292,8 +292,9 @@ logs-metricsdb-0
 ## Delete stale PVCs
 
 ```bash
-mi='sql-gp-1'
-kubectl delete pvc -l=controller=$mi -n arc
+cd /workspaces/arc-data-benchmark/scripts
+chmod u+x delete-pvc.sh
+./delete-pvc.sh
 ```
 
 ## FSM login
