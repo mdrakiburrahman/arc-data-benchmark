@@ -280,10 +280,11 @@ logs-metricsdb-0
 
 #### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
 
-| #   | Timestamp (UTC)      | Step performed | Clusters | Nodes (no Autoscale) | MIs | Query results             | Comments                                     |
-| --- | -------------------- | -------------- | -------- | -------------------- | --- | ------------------------- | -------------------------------------------- |
-| 1   | 2022-03-26T21:25:00Z | +2 DS5_v2      | 1        | 2*DS3_V2, 2*DS5_v2   | 0   | 2022-03-26 5-32-01 PM.csv | Spin up big nodes for stress test            |
-| 2   | 2022-03-26T23:23:00Z | +55 GP MIs     | 1        | 2*DS3_V2, 2*DS5_v2   | 55  | TBD                       | (110 GB - 2 GB (used))/ 2 GB Per MI = 55 MIs |
+| #   | Timestamp (UTC)      | Step performed               | Clusters | Nodes (no Autoscale) | MIs | Query results                        | Comments                                     |
+| --- | -------------------- | ---------------------------- | -------- | -------------------- | --- | ------------------------------------ | -------------------------------------------- |
+| 1   | 2022-03-26T21:25:00Z | +5 DS5_v2                    | 1        | 2*DS3_V2, 5*DS5_v2   | 0   | 2022-03-26 5-32-01 PM.csv            | Spin up big nodes for stress test            |
+| 2   | 2022-03-26T23:30:00Z | +55 GP MIs                   | 1        | 2*DS3_V2, 5*DS5_v2   | 55  | 2022-03-26 8-16-00 PM_55-sql-mis.csv | (110 GB - 2 GB (used))/ 2 GB Per MI = 55 MIs |
+| 3   | 2022-03-26T23:59:00Z | -55 GP MIs, - 5 DS5_v2 nodes | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                                 | Removed MIs and nodes as test is over         |
 
 ---
 
@@ -428,7 +429,18 @@ Start to end view:
 
 ### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
 
-55 MIs:
+#### End-to-end recording of deployment and cleanup
+
+[![Deploying 55 Arc SQL MIs at once](_images/thumbnail.png)](https://youtu.be/s5x_y1fRZDs)
+
+55 MIs spun up - `2022-03-26 8-16-00 PM_55-sql-mis.csv`:
+![1](_images/55-sql-mi-ready.png)
+
+PVC usage grouped by nodes:
+![1](_images/55-sql-mi-nodes.png)
+
+PVC usage grouped by PVCs:
+![1](_images/55-sql-mi-pvc.png)
 
 ---
 
