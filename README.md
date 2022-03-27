@@ -442,6 +442,81 @@ PVC usage grouped by nodes:
 PVC usage grouped by PVCs:
 ![1](_images/55-sql-mi-pvc.png)
 
+**Observations**
+- LogsDB, Kafka Broker, and Controller PVC log sizes aggressively increase nearing 100%
+- During spinup of MIs, Controller goes into an error state a few times, but recovers - all 55 SQL MIs go into `Ready` without any manual intervention
+- During spindown of MIs, Controller doesn’t recover from deadlock state. Manual intervention is needed - killing Controller pod recovers the state and FSM error logs get cleaned up - see `3:00` minute mark
+
+#### Errors
+
+The following errors were encountered in the FSM:
+```xml
+<Exception>
+  <Message>Transaction (Process ID 61) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.</Message>
+  <Type>System.Data.SqlClient.SqlException</Type>
+  <StackTrace>   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean&amp; dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task&amp; task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, Boolean sendToPipe, Int32 timeout, Boolean asyncWrite, String methodName)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at Microsoft.SqlServer.Controller.Core.DatabaseOperations.ExecuteNonQuery(String sqlQuery, SqlParameter[] queryParams, Boolean openSymmetricKey, SqlTransaction transaction)
+   at Microsoft.SqlServer.Controller.Core.DatabaseOperations.ExecuteNonQuery(String sqlQuery, IDictionary`2 queryParams, Boolean openSymmetricKey, SqlTransaction transaction)
+   at Microsoft.SqlServer.Controller.Core.Configuration.ManifestFile.ManifestFileManager.DeleteManifest(String scaledSetNamespace, String scaledSetName)
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Microsoft.SqlServer.Controller.Core.ResourceComposition.Providers.Management.ConfigurationFeatureProvider.DeleteResource(ExecutionContext context, CustomResourceConfigurationsMetadata spec)
+   at System.Collections.Generic.List`1.ForEach(Action`1 action)
+   at Microsoft.SqlServer.Controller.Core.ResourceComposition.ResourceComponentScheduler.Delete(ExecutionContext context, IEnumerable`1 resourceComponents)
+   at Microsoft.SqlServer.Controller.Core.Plugin.Platform.CustomResourceStateMachine.DeletingResourcesTransition(ActionOutcome&amp; actionOutcome)</StackTrace>
+</Exception>
+---
+<Exception>
+  <Message>could not initiate new preferred primary request, pending request in progress</Message>
+  <Type>Microsoft.SqlServer.Controller.Core.Exceptions.ControllerException</Type>
+  <StackTrace>   at Microsoft.SqlServer.Controller.Plugin.SqlManagedInstance.AvailabilityGroupFeatureProvider.SetPreferredPrimaryReplica(ExecutionContext context, AvailabilityGroupSpec spec)</StackTrace>
+</Exception>
+---
+<Exception>
+  <Message>Object reference not set to an instance of an object.</Message>
+  <Type>System.NullReferenceException</Type>
+  <StackTrace>   at Microsoft.SqlServer.Controller.Plugin.SqlManagedInstance.SqlManagedInstanceProvisioner.PostCreationAction(IFiniteStateMachineContext fsmContext, PrePostActionContext actionContext)
+   at Microsoft.SqlServer.Controller.Core.Plugin.Platform.CustomResourceStateMachine.PostCreationActionTransition(ActionOutcome&amp; actionOutcome)</StackTrace>
+</Exception>
+---
+<Exception>
+  <Message>Not Found: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"roles.rbac.authorization.k8s.io \"sql-gp-36-ha-role\" not found","reason":"NotFound","details":{"name":"sql-gp-36-ha-role","group":"rbac.authorization.k8s.io","kind":"roles"},"code":404}
+</Message>
+  <Type>k8s.KubernetesException</Type>
+  <StackTrace>   at Microsoft.SqlServer.Kubernetes.Client.KubernetesUtils.CallKubernetesWithCustomErrorHandling[T](Func`1 action, Boolean ignoreConflict, Boolean ignoreNotFound)
+   at Microsoft.SqlServer.Kubernetes.Client.KubernetesClient.PatchRole(JsonPatchDocument`1 patch, String roleName, String clusterNamespace)
+   at Microsoft.SqlServer.Controller.Core.ResourceComposition.Providers.K8s.RoleFeatureProvider.CreateUpdateResource(ExecutionContext context, V1Role spec)</StackTrace>
+  <InnerException>
+    <Message>Operation returned an invalid status code 'NotFound'</Message>
+    <Type>Microsoft.Rest.HttpOperationException</Type>
+    <StackTrace>   at k8s.Kubernetes.PatchNamespacedRoleWithHttpMessagesAsync(V1Patch body, String name, String namespaceParameter, String dryRun, String fieldManager, Nullable`1 force, String pretty, Dictionary`2 customHeaders, CancellationToken cancellationToken)
+   at k8s.KubernetesExtensions.PatchNamespacedRoleAsync(IKubernetes operations, V1Patch body, String name, String namespaceParameter, String dryRun, String fieldManager, Nullable`1 force, String pretty, CancellationToken cancellationToken)
+   at k8s.KubernetesExtensions.PatchNamespacedRole(IKubernetes operations, V1Patch body, String name, String namespaceParameter, String dryRun, String fieldManager, Nullable`1 force, String pretty)
+   at Microsoft.SqlServer.Kubernetes.Client.KubernetesClient.&lt;&gt;c__DisplayClass79_0.&lt;PatchRole&gt;b__0()
+   at Microsoft.SqlServer.Kubernetes.Client.KubernetesUtils.CallKubernetesWithCustomErrorHandling[T](Func`1 action, Boolean ignoreConflict, Boolean ignoreNotFound)</StackTrace>
+  </InnerException>
+</Exception>
+---
+<Exception>
+  <Message>availability group "sql-gp-12" does not exist</Message>
+  <Type>Microsoft.SqlServer.Controller.Core.Exceptions.ControllerException</Type>
+  <StackTrace>   at Microsoft.SqlServer.Controller.Plugin.SqlManagedInstance.AvailabilityGroupFeatureProvider.SetPreferredPrimaryReplica(ExecutionContext context, AvailabilityGroupSpec spec)</StackTrace>
+</Exception>
+---
+<Exception>
+  <Message>ConfigMap sql-config-sql-gp-30 does not exist.</Message>
+  <Type>k8s.KubernetesException</Type>
+  <StackTrace>   at Microsoft.SqlServer.Kubernetes.Client.KubernetesClient.GetConfigMap(String configMapName, String namespace, IDictionary`2 labels, Boolean ignoreNotFound, Int32 timeoutInSeconds)
+   at Microsoft.SqlServer.Controller.Plugin.SqlManagedInstance.AvailabilityGroupFeatureProvider.CreateConfigMaps(ExecutionContext context, AvailabilityGroupSpec spec)</StackTrace>
+</Exception>
+```
+
+
 ---
 
 # Calculations
