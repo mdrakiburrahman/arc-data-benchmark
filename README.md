@@ -34,12 +34,12 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
   - [x] ArgoCD setup
   - [x] Weavescope
   - [x] SQL MI(s)
-- [ ] Experiments
+- [X] Experiments
   - [x] **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
   - [x] **Experiment 2**: Effect of instances on Log Volumes
   - [x] **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
-  - [ ] **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
-  - [ ] **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
+  - [X] **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+    - [X] **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
 - [] Calculations
 - [] Answer questions
 
@@ -256,7 +256,7 @@ logs-metricsdb-0
 | 5   | 2022-03-23T02:34:00Z | None                                        | 1        | 25*DS3_V2, 0*DS5_v2  | 0   | 2022-03-22 10-42-30 PM_nodes_e2e.csv | Final snapshot of nodes                           |
 | 6   | 2022-03-23T02:34:00Z | Scaled down node to 2                       | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                                 | Back down to normal                               |
 
-#### **Experiment 2**: Effect of SQL MIs on Log Volumes
+#### **Experiment 2**: Effect of SQL MIs on Log Volumes - ✔
 
 | #   | Timestamp (UTC)      | Step performed      | Clusters | Nodes (no Autoscale) | MIs | Query results              | Comments                                 |
 | --- | -------------------- | ------------------- | -------- | -------------------- | --- | -------------------------- | ---------------------------------------- |
@@ -267,7 +267,7 @@ logs-metricsdb-0
 | 5   | 2022-03-25T01:58:00Z | +5 GP MI            | 1        | 2*DS3_V2, 1*DS5_v2   | 7   | 2022-03-24 10-31-04 PM.csv | Deployed +5 MIs to see if 5x logs slope  |
 | 6   | 2022-03-25T02:47:00Z | -7 GP MIs - 1 nodes | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                       | Removed MIs and big node as test is over |
 
-#### **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
+#### **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes - ✔
 
 | #   | Timestamp (UTC)      | Step performed         | Clusters | Nodes (no Autoscale) | MIs         | Query results              | Comments                                     |
 | --- | -------------------- | ---------------------- | -------- | -------------------- | ----------- | -------------------------- | -------------------------------------------- |
@@ -278,13 +278,13 @@ logs-metricsdb-0
 | 4   | 2022-03-26T18:45:00Z | -1 BC MI, +1 BC MI x 3 | 1        | 3*DS3_V2, 0*DS5_v2   | 1x3 replica | 2022-03-26 4-48-52 PM.csv  | Deleted previous, Deployed +1 BC, 3 Replicas |
 | 5   | 2022-03-26T21:00:00Z | -1 BC MIs - 1 nodes    | 1        | 2*DS3_V2, 0*DS5_v2   | 0           | None                       | Removed MIs and node as test is over         |
 
-#### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+#### **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there) - ✔
 
 | #   | Timestamp (UTC)      | Step performed               | Clusters | Nodes (no Autoscale) | MIs | Query results                        | Comments                                     |
 | --- | -------------------- | ---------------------------- | -------- | -------------------- | --- | ------------------------------------ | -------------------------------------------- |
 | 1   | 2022-03-26T21:25:00Z | +5 DS5_v2                    | 1        | 2*DS3_V2, 5*DS5_v2   | 0   | 2022-03-26 5-32-01 PM.csv            | Spin up big nodes for stress test            |
 | 2   | 2022-03-26T23:30:00Z | +55 GP MIs                   | 1        | 2*DS3_V2, 5*DS5_v2   | 55  | 2022-03-26 8-16-00 PM_55-sql-mis.csv | (110 GB - 2 GB (used))/ 2 GB Per MI = 55 MIs |
-| 3   | 2022-03-26T23:59:00Z | -55 GP MIs, - 5 DS5_v2 nodes | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                                 | Removed MIs and nodes as test is over         |
+| 3   | 2022-03-26T23:59:00Z | -55 GP MIs, - 5 DS5_v2 nodes | 1        | 2*DS3_V2, 0*DS5_v2   | 0   | None                                 | Removed MIs and nodes as test is over        |
 
 ---
 
@@ -443,6 +443,7 @@ PVC usage grouped by PVCs:
 ![1](_images/55-sql-mi-pvc.png)
 
 **Observations**
+
 - LogsDB, Kafka Broker, and Controller PVC log sizes aggressively increase nearing 100%
 - During spinup of MIs, Controller goes into an error state a few times, but recovers - all 55 SQL MIs go into `Ready` without any manual intervention
 - During spindown of MIs, Controller doesn’t recover from deadlock state. Manual intervention is needed - killing Controller pod recovers the state and FSM error logs get cleaned up - see `3:00` minute mark
@@ -450,6 +451,7 @@ PVC usage grouped by PVCs:
 #### Errors
 
 The following errors were encountered in the FSM:
+
 ```xml
 <Exception>
   <Message>Transaction (Process ID 61) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.</Message>
@@ -515,7 +517,6 @@ The following errors were encountered in the FSM:
    at Microsoft.SqlServer.Controller.Plugin.SqlManagedInstance.AvailabilityGroupFeatureProvider.CreateConfigMaps(ExecutionContext context, AvailabilityGroupSpec spec)</StackTrace>
 </Exception>
 ```
-
 
 ---
 
