@@ -34,12 +34,12 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
   - [x] ArgoCD setup
   - [x] Weavescope
   - [x] SQL MI(s)
-- [X] Experiments
+- [x] Experiments
   - [x] **Experiment 1**: Effect of nodes (since `metricsdc` runs as `DaemonSet`) on Log Volumes - ✔
   - [x] **Experiment 2**: Effect of instances on Log Volumes
   - [x] **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
-  - [X] **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
-    - [X] **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
+  - [x] **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
+    - [x] **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
 - [] Calculations
 - [] Answer questions
 
@@ -49,13 +49,14 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
 
 There are a few different monitoring tools deployed in this environment, below are the endpoints:
 
-| Tech       | Expose endpoint                                                        | Endpoint                 | Credentials                                        | Purpose                  |
-| ---------- | ---------------------------------------------------------------------- | ------------------------ | -------------------------------------------------- | ------------------------ |
-| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000` | `https://127.0.0.1:3000` | admin:acntorPRESTO!                                | Data Services Metrics    |
-| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`    | `https://127.0.0.1:5601` | admin:acntorPRESTO!                                | Data Services Logs       |
-| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`           | `https://127.0.0.1:80`   | admin:rnHFlEtXSwf5aDMx                             | CICD interface           |
-| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`          | `http://127.0.0.1:81`    | None                                               | K8s monitoring interface |
-| FSM        | `kubectl port-forward service/controldb-svc -n arc 1433:1433`          | `127.0.0.1,1433`         | controldb-rw-user:Xk3Ie43zXHA-QtvDsZGpsiOZcYXyNchz | ControllerDB             |
+| Tech       | Expose endpoint                                                         | Endpoint                 | Credentials                                        | Purpose                  |
+| ---------- | ----------------------------------------------------------------------- | ------------------------ | -------------------------------------------------- | ------------------------ |
+| Grafana    | `kubectl port-forward service/metricsui-external-svc -n arc 3000:3000`  | `https://127.0.0.1:3000` | admin:acntorPRESTO!                                | Data Services Metrics    |
+| Kibana     | `kubectl port-forward service/logsui-external-svc -n arc 5601:5601`     | `https://127.0.0.1:5601` | admin:acntorPRESTO!                                | Data Services Logs       |
+| ArgoCD     | `kubectl port-forward service/argocd-server -n argocd 80:80`            | `https://127.0.0.1:80`   | admin:rnHFlEtXSwf5aDMx                             | CICD interface           |
+| Weavescope | `kubectl port-forward service/weave-scope-app -n weave 81:80`           | `http://127.0.0.1:81`    | None                                               | K8s monitoring interface |
+| FSM        | `kubectl port-forward service/controldb-svc -n arc 1433:1433`           | `127.0.0.1,1433`         | controldb-rw-user:Xk3Ie43zXHA-QtvDsZGpsiOZcYXyNchz | ControllerDB             |
+| SQL MI     | `kubectl port-forward service/sql-gp-1-external-svc -n arc 31433:31433` | `127.0.0.1,1433`         | boor:acntorPRESTO!                                 | SQL MI CAG endpoint      |
 
 ---
 
@@ -487,7 +488,7 @@ The following errors were encountered in the FSM:
 </Exception>
 ---
 <Exception>
-  <Message>Not Found: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"roles.rbac.authorization.k8s.io \"sql-gp-36-ha-role\" not found","reason":"NotFound","details":{"name":"sql-gp-36-ha-role","group":"rbac.authorization.k8s.io","kind":"roles"},"code":404}
+  <Message>Not Found: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"roles.rbac.authorization.k8s.io "sql-gp-36-ha-role" not found","reason":"NotFound","details":{"name":"sql-gp-36-ha-role","group":"rbac.authorization.k8s.io","kind":"roles"},"code":404}
 </Message>
   <Type>k8s.KubernetesException</Type>
   <StackTrace>   at Microsoft.SqlServer.Kubernetes.Client.KubernetesUtils.CallKubernetesWithCustomErrorHandling[T](Func`1 action, Boolean ignoreConflict, Boolean ignoreNotFound)
@@ -632,4 +633,55 @@ A: TBD
 
 # Lessons Learned
 
-TBD
+## How to deal with logs fillup
+
+> Here are the [AKS StorageClasses](https://docs.microsoft.com/en-us/azure/aks/concepts-storage).
+
+Before:
+![Logs full](_images/logs-full.png)  
+
+These are the 3 PVCs we want to resize:
+* PVC: `data-logsdb-0`, STS: `logsdb`
+* PVC: `data-kafka-broker-0`, STS: `kafka-broker` 
+* PVC: `logs-control`, ReplicaSet: `control`
+
+**StatefulSet**
+```bash
+# To edit
+export PVC="data-kafka-broker-0"
+export STS="kafka-broker"
+
+# Scale STS down to 0
+kubectl scale statefulsets $STS -n arc --replicas=0
+# statefulset.apps/logsdb scaled
+
+# Patch PVC size to 100Gi
+kubectl patch pvc $PVC -n arc --type merge --patch $payload '{"spec": {"resources": {"requests": {"storage": "100Gi"}}}}'
+
+# Monitor PVC status
+watch -n 5 kubectl get pvc $PVC -n arc -o=jsonpath='{.status.conditions}'
+# [{"lastProbeTime":null,"lastTransitionTime":"2022-03-30T21:16:15Z","message":"Waiting for user to (re-)start a pod to finish file system resize of volume on node.","status":"True","type":"FileSystemResizePending"}]
+
+# Scale STS down to 1
+kubectl scale statefulsets $STS -n arc --replicas=1
+# statefulset.apps/logsdb scaled
+
+```
+
+**ReplicaSets*
+```bash
+export PVC="logs-control"
+export ReplcaSet="control"
+kubectl scale replicaset $ReplcaSet -n arc --replicas=0
+# replicaset.apps/control scaled
+
+# Same as above
+kubectl patch pvc $PVC -n arc --type merge --patch $payload '{"spec": {"resources": {"requests": {"storage": "100Gi"}}}}'
+watch -n 5 kubectl get pvc $PVC -n arc -o=jsonpath='{.status.conditions}'
+
+# Scale ReplicaSet up to 1
+kubectl scale replicaset $ReplcaSet -n arc --replicas=1
+```
+
+After:
+![Logs cleaned](_images/logs-clean.png)
