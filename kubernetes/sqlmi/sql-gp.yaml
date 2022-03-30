@@ -1,0 +1,2529 @@
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-1
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-2
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-3
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-4
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-5
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-6
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-7
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-8
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-9
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-10
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-11
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-12
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-13
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-14
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-15
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-16
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-17
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-18
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-19
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-20
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-21
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-22
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-23
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-24
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-25
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-26
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-27
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-28
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-29
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-30
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-31
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-32
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-33
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-34
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-35
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-36
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-37
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-38
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-39
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-40
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-41
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-42
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-43
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-44
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-45
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-46
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-47
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-48
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-49
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-50
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-51
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-52
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-53
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-54
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+---
+apiVersion: sql.arcdata.microsoft.com/v2
+kind: SqlManagedInstance
+metadata:
+  name: sql-gp-55
+  namespace: arc
+spec:
+  backup:
+    retentionPeriodInDays: 7
+  dev: true
+  tier: GeneralPurpose
+  forceHA: "true"
+  licenseType: LicenseIncluded
+  replicas: 1
+  scheduling:
+    default:
+      resources:
+        limits:
+          cpu: "1"
+          memory: 2Gi
+        requests:
+          cpu: "1"
+          memory: 2Gi
+  security:
+    adminLoginSecret: sql-login-secret
+  services:
+    primary:
+      type: LoadBalancer
+      port: 31433
+  storage:
+    backups:
+      volumes:
+        - className: azurefile
+          size: 1Gi
+    data:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    datalogs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
+    logs:
+      volumes:
+        - className: managed-premium
+          size: 1Gi
