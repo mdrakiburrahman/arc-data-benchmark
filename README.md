@@ -40,8 +40,8 @@ A terraform-built scalable environment for coming up with a set of back-of-the-n
   - [x] **Experiment 3**: Effect of replicas (1, 2, 3) on Log Volumes
   - [x] **Experiment 4**: Max # of MIs you can deploy at once (assume infra is there)
     - [x] **Experiment 5**: Max # of MIs a Controller can handle at most without bugging out (assume infra is there)
-- [] Calculations
-- [] Answer questions
+- [x] Calculations
+- [x] Answer questions
 
 ---
 
