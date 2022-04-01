@@ -556,7 +556,7 @@ The following errors were encountered in the FSM:
 
 > Full raw data and analysis formulas available in [Excel file](data/Data_Analysis.xlsx)
 
-## Experiment 1: Effect of nodes on Log Volumes - ✔
+## Experiment 1: Effect of nodes on Log Volumes
 
 Data collected + Analyzed:
 ![Analysis](_images/analysis_1.png)
