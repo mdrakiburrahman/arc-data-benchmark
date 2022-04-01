@@ -330,29 +330,32 @@ kubectl apply --dry-run=client -f /workspaces/arc-data-benchmark/kubernetes/sqlm
 The following query returns all PVCs:
 
 ```sql
-let startDateTime = todatetime('2022-03-24T12:46:00Z');
-let endDateTime = startDateTime + 12h;
-let trendBinSize = 1m;
+let T1 = todatetime('2022-03-23T00:35:00Z'); // Experiment Step started
+let T2 = todatetime('2022-03-23T01:00:00Z'); // Experiment Step before end - minus 5 mins
+let trendBinSize = 5m;
+let Name = 'logs-controldb';
 
 KubePodInventory
-| where TimeGenerated < endDateTime
-| where TimeGenerated >= startDateTime
+| where TimeGenerated < T2
+| where TimeGenerated >= T1
 | where Namespace in ('arc' )
 | distinct PodUid
 | join hint.strategy=shuffle (
     InsightsMetrics
-    | where TimeGenerated < endDateTime + trendBinSize
-    | where TimeGenerated >= startDateTime - trendBinSize
+    | where TimeGenerated < T2 + trendBinSize
+    | where TimeGenerated >= T1 - trendBinSize
     | where Namespace == 'container.azm.ms/pv'
     | where Name == 'pvUsedBytes'
     | extend Tags = todynamic(Tags)
-    | extend CapacityMB = Tags.pvCapacityBytes/1048576, PodUid = tostring(Tags.podUid), PodName = Tags.podName, VolumeMB = Tags.volume/1048576, PvUsedMB = Val/1048576
+    | extend CapacityMB = Tags.pvCapacityBytes/1048576, PodUid = tostring(Tags.podUid), PodName = Tags.podName, PvUsedMB = Val/1048576
     | extend UsagePercent = round((PvUsedMB / CapacityMB) * 100, 2)
     | extend PvcName = tostring(Tags.pvcName), VolumeName = Tags.volumeName
-    | project TimeGenerated, Computer, PodName, PvcName, VolumeName, VolumeMB, PvUsedMB, CapacityMB, UsagePercent, PodUid
+    | project TimeGenerated, PvcName, VolumeName, PvUsedMB, CapacityMB, UsagePercent, PodUid
     )
     on PodUid
-| project TimeGenerated, Computer, PodName, PvcName, VolumeName, VolumeMB, PvUsedMB, CapacityMB, UsagePercent
+| project TimeGenerated, PvcName, PvUsedMB, CapacityMB
+| order by TimeGenerated asc
+| where PvcName == Name
 ```
 
 ## Query 2: Center around the time when a change was executed (e.g. node spinup)
@@ -362,6 +365,34 @@ let changeTime = todatetime('2022-03-23T01:26:00Z');
 let startDateTime = changeTime - 5m;
 let endDateTime = changeTime + 15m;
 let trendBinSize = 1m;
+```
+
+## Query 3: Get PVC capacities at a snapshot/range
+
+```sql
+let T1 = todatetime('2022-03-23T00:00:00Z'); // Experiment Step started
+let T2 = todatetime('2022-03-23T02:34:00Z'); // Experiment Step before end
+let trendBinSize = 5m;
+
+KubePodInventory
+| where TimeGenerated < T2
+| where TimeGenerated >= T1
+| where Namespace in ('arc' )
+| distinct PodUid
+| join hint.strategy=shuffle (
+    InsightsMetrics
+    | where TimeGenerated < T2 + trendBinSize
+    | where TimeGenerated >= T1 - trendBinSize
+    | where Namespace == 'container.azm.ms/pv'
+    | where Name == 'pvUsedBytes'
+    | extend Tags = todynamic(Tags)
+    | extend CapacityMB = Tags.pvCapacityBytes/1048576, PodUid = tostring(Tags.podUid), PodName = Tags.podName, PvUsedMB = Val/1048576
+    | extend UsagePercent = round((PvUsedMB / CapacityMB) * 100, 2)
+    | extend PvcName = tostring(Tags.pvcName), VolumeName = Tags.volumeName
+    | project TimeGenerated, PvcName, VolumeName, PvUsedMB, CapacityMB, UsagePercent, PodUid
+    )
+    on PodUid
+| project TimeGenerated, PvcName, PvUsedMB, CapacityMB, UsagePercent
 ```
 
 ---
@@ -523,7 +554,43 @@ The following errors were encountered in the FSM:
 
 # Calculations
 
-TBD
+> Full raw data and analysis formulas available in [Excel file](data/Data_Analysis.xlsx)
+
+## Experiment 1: Effect of nodes on Log Volumes - ✔
+
+Data collected + Analyzed:
+![Analysis](_images/analysis_1.png)
+
+Results:
+![Result](_images/analysis_1-1.png)
+![Result](_images/analysis_1-2.png)
+
+## Experiment 2: Effect of instances on Log Volumes
+
+Data collected + Analyzed:
+![Analysis](_images/analysis_2.png)
+
+Results:
+![Result](_images/analysis_2-1.png)
+![Result](_images/analysis_2-2.png)
+
+## Experiment 3: Effect of replicas (1, 2, 3) on Log Volumes
+
+Data collected + Analyzed:
+![Analysis](_images/analysis_3.png)
+
+Results:
+![Result](_images/analysis_3-1.png)
+![Result](_images/analysis_3-2.png)
+
+## Experiment 4: Max # of MIs you can deploy at once (assume infra is there)
+
+Data collected + Analyzed:
+![Analysis](_images/analysis_4.png)
+
+Results:
+![Result](_images/analysis_4-1.png)
+![Result](_images/analysis_4-2.png)
 
 ---
 
@@ -533,35 +600,67 @@ TBD
 
 #### Q: How should you size your `logsdb` volume?
 
-A: TBD
+Our analysis shows the following relationship Logs generated per node, per MI. This means that the log cleanup rate configured should aim to cleanup this amount of log at steady state:
 
-#### Q: What volume of logs are created on cluster deployment?
+| #   | PVC_Name               | MB/min per Node | MB/min per MI |
+| --- | ---------------------- | --------------- | ------------- |
+| 1   | data-control           | 0               | 0             |
+| 2   | data-controldb         | 0               | 0             |
+| 3   | data-kafka-broker-0    | 0.143432472     | 0.32995357    |
+| 4   | data-kafka-zookeeper-0 | 0               | 0             |
+| 5   | data-logsdb-0          | 0.132335314     | 0.183516429   |
+| 6   | data-metricsdb-0       | 0.084170391     | 0.04307119    |
+| 7   | logs-control           | 0.033630843     | 0.059610238   |
+| 8   | logs-controldb         | 0.001476335     | 0.000464762   |
+| 9   | logs-kafka-broker-0    | 0.000519194     | 0.000621429   |
+| 10  | logs-kafka-zookeeper-0 | 4.41521E-05     | 3.80952E-05   |
+| 11  | logs-logsdb-0          | 0.008074566     | 0.000944048   |
+| 12  | logs-metricsdb-0       | 0.001170087     | 0.00030881    |
 
-A: TBD
+Our top 4 PVCs are:
+* data-kafka-broker-0
+* datalogs-db-0
+* data-metrics-db-0
+* logs-control
+
+The rest are insignificant.
+
+So for example, for a 10 Node Kubernetes Cluster, with 25 SQL MIs running, we can assume the following amount of logs will be generated per day:
+
+```text
+MB of logs/day = (10 Node * (MB/min per Node) + 25 MIs * (MB/min per MI)) 1440 min/day
+```
+
+![Sample env](_images/q-1.png)
+
+#### Q: What volume of logs are created on MI deployment?
+
+In the worst case, when MIs error (e.g. due to Kubernetes scheduling errors), these are rough estimates of logs generated per minute:
+![Result](_images/analysis_4-2.png)
 
 #### Q: At what rate does the control plane produce logs with no data service instances and no errors?
 
-A: TBD
+![Sample env](_images/q-2.png)
 
 #### Q: What volume of logs are created on sqlmi creation?
 
-A: TBD
+![Result](_images/analysis_2-2.png)
 
 #### Q: At what rate are sqlmi logs produced over time per instance? Per replica?
 
-A: TBD
+![Result](_images/analysis_3-2.png)
 
 #### Q: All of the above, but for Kafka too
 
-A: TBD
+Above graph includes Kafka PVCs.
 
 #### Q: How should you size your `metricsdb` volume?
 
-A: TBD
+Above graph includes Metricsdb PVCs.
 
 #### Q: At what rate are `metricsdc` logs produced per node? Is this significant enough to be factored into the calculation?
 
-A: TBD
+Since metricsdc does not use PVCs, this was not collected in this experiment.
 
 ---
 
@@ -569,15 +668,11 @@ A: TBD
 
 #### Q: How should you set your logs retention settings?
 
-A: TBD
+See above sample calculation for sample environment.
 
 #### Q: This is basically the same question as how to size your logsdb volume. Retention = volume_size / avg_logs_per_day
 
-A: TBD
-
-#### Q: Also note this feature is in progress (planned default is two weeks)
-
-A: TBD
+See above sample calculation for sample environment.
 
 ---
 
@@ -585,29 +680,29 @@ A: TBD
 
 #### Q: How many sqlmi instances/replicas can you run per data controller? (Assuming logs/metrics retention is not the bottleneck)
 
-> Not sure what specific benchmarks we need for this beyond just slowly increasing on a big cluster and seeing what happens.
-
-A: TBD
+A: We saw at least 55 SQL MIs can comfortable deploy in parallel per controller:
+* This can be stressed further if needed.
+* It would be required to leave these 55 SQL MIs ins steady state to perform day-to-day operations. This was not possible in this Lab Environment due to budget.
 
 #### Q: What’s the rate of collection per day per `sqlmi` CR instance? Per replica?
 
-A: TBD
+See above calculations.
 
 #### Q: What is the rate of metrics collection per node? (when enabled)
 
-A: TBD
+See above calculationss.
 
 #### Q: Should we be piping all logs files into elastic/influx? What can we exclude?
 
-A: TBD
+A: TBD - design decision.
 
 #### Q: Should we offer settings to control the level of logs collection on a per file basis?
 
-A: TBD
+A: It seems if the log pruning for the big 4 hitters can be configured as a "holistic" prune setting, this may not be required.
 
 #### Q: Can we add info/debug/error level metadata to every log file?
 
-A: TBD
+A: TBD - design decision.
 
 ---
 
@@ -615,19 +710,11 @@ A: TBD
 
 #### Q: How can we stop errors from spamming the logs?
 
-A: TBD
+A: TBD - design decision.
 
 #### Q: How do customers resize monitoring resources as we increase our collection? (e.g. `PV` resize)
 
-A: TBD
-
-#### Q: Does Indirect VS Direct mode increase the amount of logs generated for the same setup?
-
-A: TBD
-
-#### Q: Does Transactions happening on an MI (e.g. HammerDB) increase the amount of logs/metrics generated?
-
-A: TBD
+A: See below for PVC resize steps. Note that Customers need PVCs that support resizing - otherwise they will be in trouble when PVCs are full. Workaround is to schedule PVCs with much more size than needed, and set more aggressive prune settings.
 
 ---
 
@@ -638,14 +725,16 @@ A: TBD
 > Here are the [AKS StorageClasses](https://docs.microsoft.com/en-us/azure/aks/concepts-storage).
 
 Before:
-![Logs full](_images/logs-full.png)  
+![Logs full](_images/logs-full.png)
 
 These are the 3 PVCs we want to resize:
-* PVC: `data-logsdb-0`, STS: `logsdb`
-* PVC: `data-kafka-broker-0`, STS: `kafka-broker` 
-* PVC: `logs-control`, ReplicaSet: `control`
+
+- PVC: `data-logsdb-0`, STS: `logsdb`
+- PVC: `data-kafka-broker-0`, STS: `kafka-broker`
+- PVC: `logs-control`, ReplicaSet: `control`
 
 **StatefulSet**
+
 ```bash
 # To edit
 export PVC="data-kafka-broker-0"
@@ -668,7 +757,8 @@ kubectl scale statefulsets $STS -n arc --replicas=1
 
 ```
 
-**ReplicaSets*
+**ReplicaSets**
+
 ```bash
 export PVC="logs-control"
 export ReplcaSet="control"
@@ -685,3 +775,7 @@ kubectl scale replicaset $ReplcaSet -n arc --replicas=1
 
 After:
 ![Logs cleaned](_images/logs-clean.png)
+
+## Gotchas
+
+- If in parallel MIs are being deployed and scheduler struggles, an incredible amount of logs are generated (see top 3 PVCs above). This is not an accurate representation of how much system produces in Steady State.

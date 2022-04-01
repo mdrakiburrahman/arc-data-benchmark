@@ -39,3 +39,6 @@ override.tf.json
 
 # Env files
 *.env
+
+# Python
+python/env/*
